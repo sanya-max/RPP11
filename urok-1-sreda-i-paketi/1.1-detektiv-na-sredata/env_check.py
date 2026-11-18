@@ -6,7 +6,8 @@
 import os
 import platform
 import sys
-
+import site
+import importlib.metadata
 
 def in_virtualenv() -> bool:
     """Връща True, ако програмата се изпълнява във виртуална среда."""
@@ -14,20 +15,30 @@ def in_virtualenv() -> bool:
 
 
 def report() -> None:
-    print("=" * 52)
+    print("=" * 60)
     print("ДОКЛАД ЗА СРЕДАТА")
-    print("=" * 52)
+    print("=" * 60)
     print(f"Версия на Python : {platform.python_version()}")
     print(f"Изпълним файл    : {sys.executable}")
     print(f"Базов префикс    : {sys.base_prefix}")
     print(f"Текущ префикс    : {sys.prefix}")
     print(f"Работна папка    : {os.getcwd()}")
-    print("-" * 52)
+
+        # Път до папката с инсталираните пакети
+    print("\nПАПКА С ИНСТАЛИРАНИ ПАКЕТИ:")
+    for path in site.getsitepackages():
+        print(path)
+
+    # Брой инсталирани пакети
+    packages = list(importlib.metadata.distributions())
+    print(f"\nБрой инсталирани пакети: {len(packages)}")
+
+    print("=" * 60)
     if in_virtualenv():
         print("СТАТУС: РАБОТИШ ВЪВ ВИРТУАЛНА СРЕДА.")
     else:
         print("СТАТУС: ГЛОБАЛЕН PYTHON — внимавай какво инсталираш!")
-    print("=" * 52)
+    print("=" * 60)
 
 
 if __name__ == "__main__":
